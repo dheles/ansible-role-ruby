@@ -3,20 +3,14 @@
   yum: name={{ item }} state=present
   with_items:
     - ruby
-    # - ruby-devel
+    - rubygems
   when: ansible_os_family == 'RedHat'
 
 - name: install ruby - Debian
   apt: name={{ item }} state=present
   with_items:
     - ruby
-    # - ruby-devel
   when: ansible_os_family == 'Debian'
-
-- name: set GEM_HOME & GEM_PATH for all users and put the gem executable directory in everyone's PATH
-  template:
-    src: "templates/ruby.sh.j2"
-    dest: "/etc/profile.d/ruby.sh"
 
 - name: update rubygems
   shell: "gem update --system"
