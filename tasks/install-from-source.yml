@@ -5,8 +5,6 @@
   failed_when: false
   changed_when: false
 
-- debug: var=ruby_version_result.stdout
-
   # only install if you need to
 - block:
 
