@@ -1,4 +1,11 @@
 ---
+- name: don't install ruby docs
+  lineinfile:
+    dest:   /usr/local/etc/gemrc
+    create: true
+    regexp: "^gem: --no-document"
+    line:    "gem: --no-document"
+
 - name: install ruby from source
   include: install-from-source.yml
   when: ruby_from_source
