@@ -8,7 +8,6 @@ WIP Notice
 
 This role is a Work-In-Progress. It is limited in the following ways:
 
-* Only installs latest packaged version (from yum or apt)
 * Only tested within very few OSs/versions
 
 Requirements

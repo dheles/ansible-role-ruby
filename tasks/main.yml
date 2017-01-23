@@ -1,16 +1,20 @@
 ---
+- name: install ruby from source
+  include: install-from-source.yml
+  when: ruby_from_source
+
 - name: install ruby - RedHat
   yum: name={{ item }} state=present
   with_items:
     - ruby
     - rubygems
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat' and not ruby_from_source
 
 - name: install ruby - Debian
   apt: name={{ item }} state=present
   with_items:
     - ruby
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian' and not ruby_from_source
 
 - name: update rubygems
   shell: "gem update --system"

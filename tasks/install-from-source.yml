@@ -1,0 +1,65 @@
+---
+- name: get ruby version
+  shell: "ruby --version"
+  register: ruby_version_result
+  failed_when: false
+  changed_when: false
+
+- debug: var=ruby_version_result.stdout
+
+  # only install if you need to
+- block:
+
+  - name: install prereqs for building ruby from source - RedHat
+    yum: name={{ item }} state=present
+    with_items:
+      - gcc
+      - bzip2
+      - openssl-devel
+      - libyaml-devel
+      - libffi-devel
+      - readline-devel
+      - zlib-devel
+      - gdbm-devel
+      - ncurses-devel
+
+  - name: get ruby
+    get_url:
+      url:      "{{ ruby_url }}"
+      dest:     "{{ ruby_download_dir }}"
+      checksum: "{{ ruby_checksum_algorithm }}:{{ ruby_checksum }}"
+    register: got_ruby
+
+  - name: exract ruby
+    unarchive:
+      src:        "{{ ruby_download_dir }}/{{ ruby_download_file }}"
+      dest:       "{{ ruby_download_dir }}"
+      remote_src: yes
+    when: got_ruby.changed
+
+  - name: build ruby
+    command: >
+      {{ item }}
+      chdir="{{ ruby_download_dir }}/{{ ruby_dir }}"
+    with_items:
+      - "./configure {{ ruby_configure_options }}"
+      - make
+      - make install
+
+  - name: symlink ruby
+    file:
+      src: "{{ ruby_install_dir }}/bin/{{ item }}"
+      dest: "/usr/bin/{{ item }}"
+      state: link
+      force: yes
+    with_items:
+      - erb
+      - gem
+      - irb
+      - rake
+      - rdoc
+      - ruby
+      - bundle
+
+  # end block
+  when: ruby_version_full not in ruby_version_result.stdout
