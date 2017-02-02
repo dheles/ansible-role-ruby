@@ -23,6 +23,12 @@
     - ruby
   when: ansible_os_family == 'Debian' and not ruby_from_source
 
+- name: put rubygems on path
+  template:
+    src: "rubygems.sh.j2"
+    dest: "/etc/profile.d/rubygems.sh"
+  become: true
+
 - name: update rubygems
   shell: "gem update --system"
   register: result
