@@ -4,6 +4,7 @@
   register: ruby_version_result
   failed_when: false
   changed_when: false
+  become: false
 
   # only install if you need to
 - block:
@@ -43,6 +44,7 @@
       - "./configure {{ ruby_configure_options }}"
       - make
       - make install
+    when: got_ruby.changed
 
   - name: symlink ruby
     file:
