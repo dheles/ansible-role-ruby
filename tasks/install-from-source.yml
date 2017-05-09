@@ -46,20 +46,20 @@
       - make install
     when: got_ruby.changed
 
-  - name: symlink ruby
-    file:
-      src: "{{ ruby_install_dir }}/bin/{{ item }}"
-      dest: "/usr/bin/{{ item }}"
-      state: link
-      force: yes
-    with_items:
-      - erb
-      - gem
-      - irb
-      - rake
-      - rdoc
-      - ruby
-      - bundle
-
   # end block
   when: ruby_version_full not in ruby_version_result.stdout
+
+- name: symlink ruby
+  file:
+    src: "{{ ruby_install_dir }}/bin/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    state: link
+    force: yes
+  with_items:
+    - erb
+    - gem
+    - irb
+    - rake
+    - rdoc
+    - ruby
+    - bundle
