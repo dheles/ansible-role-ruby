@@ -55,6 +55,7 @@
     dest: "/usr/bin/{{ item }}"
     state: link
     force: yes
+  become: true
   with_items:
     - erb
     - gem
